@@ -1,0 +1,26 @@
+frameworkVersion: "=1.9.0"
+
+service: hi-api
+
+provider:
+  name: aws
+  runtime: python2.7
+  stage: dev
+  region: us-east-1
+
+package:
+  include:
+    - vendor/**
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.py
+#    - exclude-me-dir/**
+
+functions:
+  hello:
+    handler: handler.rawtable
+    events:
+      - http:
+          path: raw
+          method: get
+
