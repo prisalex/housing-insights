@@ -1,20 +1,22 @@
 import sys
 sys.path.insert(0, './vendor')
 
-import json
 import datetime
+import decimal
+import json
 
 from sqlalchemy import create_engine, inspect, types
 from sqlalchemy.engine import reflection
 
 
-date_handler = lambda obj: (
-    obj.isoformat()
-    if isinstance(obj, datetime.datetime)
-    or isinstance(obj, datetime.date)
-    else None
-)
+class HiJsonEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime.datetime) or isinstance(o, datetime.date):
+            return o.isoformat()    
+        elif isinstance(o, decimal.Decimal):
+            return float(o)
 
+        return json.JSONEncoder.default(self, o)
 
 '''
 Returns raw DB table in CSV format. 
@@ -32,8 +34,8 @@ def rawtable(event, context):
         return create_error_body("requested table does not exist")
 
     return {
-        "statusCode": 200,
-        "body": json.dumps(data, default=date_handler)
+        "statusCode": 200,        
+        "body": json.dumps(data, cls=HiJsonEncoder)
     }
 
 def create_error_body(errorMessage):
@@ -72,7 +74,7 @@ def get_database_inspector():
     return inspect(engine)
 
 def get_connect_str():
-    return ""
+    return ""    
 
 def get_database_connection():
     # Connect to the database    
