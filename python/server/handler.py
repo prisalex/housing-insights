@@ -74,7 +74,8 @@ def get_database_inspector():
     return inspect(engine)
 
 def get_connect_str():
-    return ""    
+    #fill this in with the real connection string to run
+    return ""        
 
 def get_database_connection():
     # Connect to the database    
