@@ -23,4 +23,5 @@ functions:
       - http:
           path: raw
           method: get
+          cors: true
 

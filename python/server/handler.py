@@ -34,6 +34,9 @@ def rawtable(event, context):
         return create_error_body("requested table does not exist")
 
     return {
+        "headers": {
+            "Access-Control-Allow-Origin" : "*"# Required for CORS support to work          
+        },
         "statusCode": 200,        
         "body": json.dumps(data, cls=HiJsonEncoder)
     }
@@ -75,7 +78,7 @@ def get_database_inspector():
 
 def get_connect_str():
     #fill this in with the real connection string to run
-    return ""        
+    return ""    
 
 def get_database_connection():
     # Connect to the database    
